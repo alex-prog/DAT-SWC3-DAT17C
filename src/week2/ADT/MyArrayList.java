@@ -3,10 +3,9 @@ package week2.ADT;
 /**
  * Created by coag on 10-09-2018.
  */
-public class MyArrayList<T> implements MyList {
+public class MyArrayList<T> implements MyList<T> {
 
     private T[] data = (T[])new Object[5];
-
 
 
     @Override
@@ -15,17 +14,17 @@ public class MyArrayList<T> implements MyList {
     }
 
     @Override
-    public void add() {
+    public void add(T el) {
 
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         return null;
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         return null;
     }
 }
