@@ -1,4 +1,5 @@
 package week2.ADT;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,10 +31,11 @@ public class MyArrayList<T> implements MyList<T> {
 
     }
 
+
     @Override
-    public T get(int index)  {
-        if(index<0 || index>size-1){
-            throw new IndexOutOfBoundsException(""+index);
+    public T get(int index) {
+        if (index < 0 || index > size - 1) {
+            throw new IndexOutOfBoundsException("" + index);
         }
         return data[index];
     }
@@ -41,16 +43,19 @@ public class MyArrayList<T> implements MyList<T> {
     @Override
     public T remove(int index) {
         T temp = data[index];
-        data[index] = null;
+        for (int j = index + 1; j < size; j++) {
+            data[j - 1] = data[j];
+        }
         size--;
+        data[size] = null;
         return temp;
     }
 
     @Override
     public String toString() {
-        String result = "[";
-        for (int i = 0; i < size; i++) {
-            result += data[i].toString() + ", ";
+        String result = "[" + data[0];
+        for (int i = 1; i < size; i++) {
+            result += ", " + data[i].toString();
         }
         return result + "]";
     }
