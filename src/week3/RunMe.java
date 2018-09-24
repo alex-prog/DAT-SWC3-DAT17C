@@ -8,44 +8,69 @@ public class RunMe {
 
         long max = 10_000_000L;
         final LongCounter counter = new LongCounter();
-        int noOfThreads = 4;
+        int noOfThreads = 100;
 
-        long start = System.currentTimeMillis();
-
-        Thread t1 = new Thread(()->{
-            for (long i = 1; i <= max/2; i++) {
-                if (isPrime(i)) {
-                    counter.increment();
-                }
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (long i = (max/2)+1; i <= max; i++) {
-                    if (isPrime(i)) {
+        Thread[] threads = new Thread[noOfThreads];
+        for (int i = 0; i < noOfThreads; i++) {
+            final long temp = i;
+            Thread t = new Thread(() -> {
+                for (long j = 1+(temp*max/noOfThreads); j <= (temp+1)*max/noOfThreads; j++) {
+                    if (isPrime(j)) {
                         counter.increment();
                     }
                 }
-            }
-        });
-
-
-        t1.start();
-        t2.start();
-
-        try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            });
+            threads[i] = t;
         }
 
+        long start = System.currentTimeMillis();
+        for (Thread t : threads) {
+            t.start();
+        }
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         long stop = System.currentTimeMillis();
 
         System.out.println(counter.get());
         System.out.println("Execution time: " + (stop - start) + " ms");
+
+
+//        Thread t1 = new Thread(() -> {
+//            for (long i = 1; i <= max / 2; i++) {
+//                if (isPrime(i)) {
+//                    counter.increment();
+//                }
+//            }
+//        });
+//
+//        Thread t2 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (long i = (max / 2) + 1; i <= max; i++) {
+//                    if (isPrime(i)) {
+//                        counter.increment();
+//                    }
+//                }
+//            }
+//        });
+//
+//
+//        t1.start();
+//        t2.start();
+//
+//        try {
+//            t1.join();
+//            t2.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+
 
 //        System.out.println("hi");
 //
@@ -81,14 +106,14 @@ public class RunMe {
     }
 
     public static boolean isPrime(long number) {
-        if(number == 2){
+        if (number == 2) {
             return true;
         }
-        if(number % 2 == 0){
+        if (number % 2 == 0) {
             return false;
         }
 
-        for (int i = 3; i <= Math.sqrt(number); i+=2) {
+        for (int i = 3; i <= Math.sqrt(number); i += 2) {
             if (number % i == 0) {
                 return false;
             }

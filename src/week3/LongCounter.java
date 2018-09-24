@@ -4,7 +4,7 @@ package week3;
  * Created by coag on 13-09-2018.
  */
 public class LongCounter {
-    private long counter;
+    private volatile long counter;
 
     public synchronized void increment(){
         counter++;
